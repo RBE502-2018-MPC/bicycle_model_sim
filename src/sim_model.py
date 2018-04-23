@@ -27,11 +27,12 @@ class BicycleModel():
         From: http://www.me.berkeley.edu/~frborrel/pdfpub/IV_KinematicMPC_jason.pdf '''
     self.state = np.zeros(4)
     self.statedot = np.zeros(4)
-    self.lr = 1.0
-    self.lf = 1.0
+    self.lr = 0.075/2  # Obtained from the actual RC car (in m)
+    self.lf = 0.075/2
+    self.power_mult = 3 # Approximation from experimental data
 
   def update(self, V, deltaf, dT):
-    v = self.state[3];
+    v = self.state[3]*self.power_mult;
     psi = self.state[2];
     beta = atan(self.lr/(self.lr+self.lf)*tan(deltaf*pi/180.0))
     self.statedot = np.array([v*cos(psi+beta),
